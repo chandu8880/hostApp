@@ -18,6 +18,8 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
+            "outputPath": "dist/hostApp",
+            "baseHref": "https://chandu8880.github.io/hostApp/",
             "polyfills": [
               "zone.js"
             ],
