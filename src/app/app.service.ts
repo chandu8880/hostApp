@@ -24,14 +24,22 @@ export class AppService {
     constructor() {
         const initialUsers = this.isBrowser()
             ? this.loadUsersFromStorage()
-            : [
-                {
-                    name: 'Nikhil',
-                    email: 'nikhil@gmail.com',
-                    password: 'pass123',
-                    role: 'Admin'
-                }
-            ];
+            : [];
+
+        // 🟡 If no users in storage, set default user
+        if (initialUsers.length === 0) {
+            initialUsers.push({
+                name: 'Nikhil',
+                email: 'nikhil@gmail.com',
+                password: 'pass123',
+                role: 'Admin'
+            });
+
+            // ✅ Save default user to localStorage
+            if (this.isBrowser()) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(initialUsers));
+            }
+        }
 
         const savedCurrentUser = this.isBrowser() ? this.loadCurrentUserFromStorage() : null;
 
@@ -73,7 +81,7 @@ export class AppService {
         return this.currentUser.value;
     }
 
-    setCurrentUser(user: User|null): void {
+    setCurrentUser(user: User | null): void {
         this.currentUser.next(user);
         if (this.isBrowser()) {
             localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
